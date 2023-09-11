@@ -34,6 +34,30 @@ const useAccount = () => {
       });
     });
   };
+  const tipPostCreator = (creatorAddress: string, amount: string, passphrase: string) => {
+    getClient()
+      .then(async (client) => {
+        const sk = await extractPrivateKey(passphrase);
+        const tx = await client.transaction.create(
+          {
+            module: 'post',
+            command: 'tip',
+            fee: BigInt(transactions.convertLSKToBeddows('0.1')),
+            params: {
+              creatorAddress,
+              amount,
+            },
+          },
+          sk,
+        );
+        await client.transaction.send(tx);
+        alert.showSuccessAlert('Tip sent');
+      })
+      .catch((err) => {
+        alert.showErrorAlert(err.message);
+      });
+  };
+
 
   const followAccount = (account: string, passphrase: string) => {
     getClient()
@@ -63,7 +87,7 @@ const useAccount = () => {
     return following.indexOf(address) !== -1;
   };
 
-  return { isLoading, followAccount, getAccount, isFollowing };
+  return { isLoading, followAccount, getAccount, isFollowing, tipPostCreator };
 };
 
 export default useAccount;

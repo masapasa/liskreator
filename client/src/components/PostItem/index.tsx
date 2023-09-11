@@ -3,6 +3,7 @@ import { AvatarSvg, CommentSvg, LikeFilledSvg, LikeSvg, RepostSvg } from 'assets
 import { PostType } from 'types/Post.type';
 import { stringShortener } from 'utils/helpers';
 import { Link } from 'react-router-dom';
+import { tipPostCreator } from 'hooks/useAccount';
 
 type PostItemProps = {
   post: PostType;
@@ -66,6 +67,10 @@ const PostItem = ({
             <RepostSvg />
             <span className="icon-item">{getValue(post.reposts.length)}</span>
           </button>
+          <button className="icon" onClick={() => tipPostCreator(post.author, '10', passphrase)} disabled={disabled}>
+          <TipSvg />
+          <span className="icon-item">{/* display the number of tips if available */}</span>
+        </button>
         </div>
       </div>
     </div>
